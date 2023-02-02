@@ -1,0 +1,14 @@
+{
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendAuctionProductsApplication<backend-auction-products>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "unicauca.edu.co.backendauctionproducts.BackendAuctionProductsApplication",
+            "projectName": "backend-auction-products",
+            "args": "",
+            "envFile": "${workspaceFolder}/.env"
+        }
+    ]
+}
