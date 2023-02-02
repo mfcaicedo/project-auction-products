@@ -7,7 +7,9 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class BackendAuctionLogInApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(BackendAuctionLogInApplication.class, args);
+		System.out.println("Start BackEnd Auction Login");
 	}
 
 }
