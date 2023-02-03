@@ -38,5 +38,13 @@ public class ProductoServiceImpl implements IProductoService{
 
     }
 
+
+	@Override
+	public ProductoDTO findById(Integer codigo) {		
+		ProductoEntity objProductoEntity= this.servicioAccesoBaseDatos.findById(codigo);
+		ProductoDTO clienteDTO=this.modelMapper.map(objProductoEntity, ProductoDTO.class);
+		return clienteDTO;
+	}
+
         
 }
