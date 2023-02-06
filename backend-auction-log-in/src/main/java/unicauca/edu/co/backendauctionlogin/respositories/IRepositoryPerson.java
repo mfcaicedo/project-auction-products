@@ -7,4 +7,8 @@ import unicauca.edu.co.backendauctionlogin.models.Person;
 @Repository
 public interface IRepositoryPerson extends JpaRepository<Person, Long> {
 
+    //query para buscar por login y contraseña
+    public Person findByLoginAndPassword(String login, String password);
+
+
 }

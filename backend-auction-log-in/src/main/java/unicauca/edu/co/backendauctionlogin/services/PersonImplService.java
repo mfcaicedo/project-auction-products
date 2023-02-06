@@ -55,19 +55,21 @@ public class PersonImplService implements IPersonService {
             responseBodyInfo.setSuccess(false);
             return responseBodyInfo;
         }
-        //Validar que el correo tenga un formato valido
-        if(!personDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
-            responseBodyInfo.setMessage("El correo no tiene un formato valido");
-            responseBodyInfo.setTypeError("errorEmail");
-            responseBodyInfo.setSuccess(false);
-            return responseBodyInfo;
-        }
-        //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
-        if(!personDTO.getCellphone().matches("^[5][0-9]{9}$")){
-            responseBodyInfo.setMessage("El teléfono debe ser de 10 dígitos y empezar con 5");
-            responseBodyInfo.setTypeError("errorPhone");
-            responseBodyInfo.setSuccess(false);
-            return responseBodyInfo;
+        //Validar que el correo tenga un formato valido (aplica solo para clientes)
+        if (personDTO.getRol().equals("CLIENTE")) {
+            //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
+            if(!personDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
+                responseBodyInfo.setMessage("El correo no tiene un formato valido");
+                responseBodyInfo.setTypeError("errorEmail");
+                responseBodyInfo.setSuccess(false);
+                return responseBodyInfo;
+            }
+            if(!personDTO.getCellphone().matches("^[5][0-9]{9}$")){
+                responseBodyInfo.setMessage("El teléfono debe ser de 10 dígitos y empezar con 5");
+                responseBodyInfo.setTypeError("errorPhone");
+                responseBodyInfo.setSuccess(false);
+                return responseBodyInfo;
+            }
         }
 
         Person personEntity = modelMapper.map(personDTO, Person.class);
@@ -129,5 +131,29 @@ public class PersonImplService implements IPersonService {
     @Override
     public void deleteById(Long id) {
         repositoryPerson.deleteById(id);
+    }
+
+    @Override
+    public ResponseBodyInfo login(PersonDTO personDTO) {
+        ResponseBodyInfo responseBodyInfo = new ResponseBodyInfo();
+        Person personEntity = modelMapper.map(personDTO, Person.class);
+        Person objPersonEntity = repositoryPerson.findByLoginAndPassword(personEntity.getLogin(), personEntity.getPassword());
+        if(objPersonEntity != null && (personEntity.getRol() == objPersonEntity.getRol())) {
+            responseBodyInfo.setData(modelMapper.map(objPersonEntity, PersonDTO.class));
+            responseBodyInfo.setMessage("Login exitoso");
+            responseBodyInfo.setTypeError("success");
+            responseBodyInfo.setSuccess(true);
+            return responseBodyInfo;
+        }else if(objPersonEntity != null && (personEntity.getRol() != objPersonEntity.getRol())){
+            responseBodyInfo.setMessage("Se permite el acceso solo para el rol: " + personEntity.getRol());
+            responseBodyInfo.setTypeError("errorRol");
+            responseBodyInfo.setSuccess(false);
+            return responseBodyInfo;
+        }else{
+            responseBodyInfo.setMessage("Usuario o contraseña incorrectos");
+            responseBodyInfo.setTypeError("errorLogin");
+            responseBodyInfo.setSuccess(false);
+            return responseBodyInfo;
+        }
     }
 }

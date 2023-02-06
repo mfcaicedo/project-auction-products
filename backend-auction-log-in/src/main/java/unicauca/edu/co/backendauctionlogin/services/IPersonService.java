@@ -16,4 +16,6 @@ public interface IPersonService {
     public ResponseBodyInfo update(Long id, PersonDTO personDTO);
 
     public void deleteById(Long id);
+
+    public ResponseBodyInfo login(PersonDTO personDTO);
 }

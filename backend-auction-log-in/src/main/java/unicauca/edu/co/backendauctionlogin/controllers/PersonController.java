@@ -55,4 +55,12 @@ public class PersonController {
         this.personService.deleteById(id);
     }
 
+    //Serviciopara validar el login
+    @RequestMapping(value = "auth/login", method = RequestMethod.POST, produces = "application/json")
+    @ResponseBody
+    public ResponseBodyInfo login(@RequestBody PersonDTO person){
+        ResponseBodyInfo responseBodyInfo = personService.login(person);
+        return responseBodyInfo;
+    }
+
 }
