@@ -7,16 +7,20 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import unicauca.edu.co.backendauctionproducts.models.ProductoEntity;
+import unicauca.edu.co.backendauctionproducts.models.SubastaEntity;
 
 @Repository
 public class UsuarioRepository {
     
     private ArrayList<ProductoEntity> listaDeProductos;
+	private ArrayList<SubastaEntity> listaDeSubastas;
 
     public UsuarioRepository()
     {
         this.listaDeProductos = new ArrayList<ProductoEntity>();
         cargarProductos();
+
+		this.listaDeSubastas = new ArrayList<SubastaEntity>();
     }
 
 	public List<ProductoEntity> findAll()
@@ -38,9 +42,68 @@ public class UsuarioRepository {
 		 return objProducto;
 	}
 
+	public SubastaEntity saveSubasta(SubastaEntity subasta)	
+	{
+		 System.out.println("Invocando a crear Subasta");
+		 SubastaEntity objSubasta=null;
+		 if (this.listaDeSubastas.add(subasta))
+		 {
+			objSubasta=subasta;
+		 }
+		 
+		 return objSubasta;
+	}
+
+
+	public SubastaEntity closeSubasta(Integer codigo)	
+	{
+		 System.out.println("Invocando a cerrar Subasta");
+		 SubastaEntity objSubasta=null;
+
+		 //buscamos la subasta con id de producto enviado por parametro
+		 for (SubastaEntity subasta : listaDeSubastas) {
+			if(subasta.getId_producto_ofertado()==codigo)
+			{
+				//actualizamos el estado de la subasta
+
+				subasta.setEstado_subasta(false);
+				objSubasta=subasta;
+				break;
+			}
+		}
+
+		 /*if (this.listaDeSubastas.add(subasta))
+		 {
+			objSubasta=subasta;
+		 }*/
+		 
+		 return objSubasta;
+	}
+
+
+
+
     private void cargarProductos()
 	{
         ProductoEntity objProducto1 = new ProductoEntity(123, "Mesa", 600000);
         this.listaDeProductos.add(objProducto1);
 	}
+
+	public ProductoEntity findById(Integer codigo)
+	{
+		System.out.println("Invocando a consultar un cliente");
+		ProductoEntity objProducto=null;
+		 
+		 for (ProductoEntity producto : listaDeProductos) {
+			 if(producto.getCodigo()==codigo)
+			 {
+				objProducto=producto;
+				 break;
+			 }
+		 }
+		 
+		 return objProducto;
+	 }
+
+
 }

@@ -18,7 +18,9 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import unicauca.edu.co.backendauctionproducts.services.IProductoService;
+import unicauca.edu.co.backendauctionproducts.services.ISubastaService;
 import unicauca.edu.co.backendauctionproducts.services.DTO.ProductoDTO;
+import unicauca.edu.co.backendauctionproducts.services.DTO.SubastaDTO;
 
 
 @RestController
@@ -28,6 +30,9 @@ public class ProductoRestController {
     @Autowired
 	private IProductoService productoService;
 
+	@Autowired
+	private ISubastaService subastaService;
+
 	//listar producto
 	@GetMapping("/productos")
 	public List<ProductoDTO> index() {
@@ -35,11 +40,36 @@ public class ProductoRestController {
 	}
 
 	//guardar producto
-    @PostMapping("/producto")
+    @PostMapping("/productos")
 	public ProductoDTO create(@RequestBody ProductoDTO producto) {	
 		ProductoDTO objProducto = null;
 		objProducto =  productoService.save(producto);
 		return objProducto;
+	}
+
+	//traer un producto por codigo
+	@GetMapping("/productos/{codigo}")
+	public ProductoDTO show(@PathVariable Integer codigo) {
+		ProductoDTO objProducto = null;		
+		objProducto = productoService.findById(codigo);		
+		return objProducto;
+	}
+
+	//crear subasta
+	@PostMapping("/subastas")
+	public SubastaDTO create(@RequestBody SubastaDTO subasta) {	
+		SubastaDTO objSubasta = null;
+		objSubasta =  subastaService.save(subasta);
+		return objSubasta;
+	}
+
+
+	//crear subasta
+	@PostMapping("/subastas/close/{codigo}")
+	public SubastaDTO close(@PathVariable Integer codigo) {	
+		SubastaDTO objSubasta = null;
+		objSubasta =  subastaService.close(codigo);
+		return objSubasta;
 	}
     
 }
