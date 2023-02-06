@@ -8,6 +8,7 @@ import org.springframework.stereotype.Repository;
 
 import unicauca.edu.co.backendauctionproducts.models.ProductoEntity;
 import unicauca.edu.co.backendauctionproducts.models.SubastaEntity;
+import unicauca.edu.co.backendauctionproducts.services.DTO.SubastaDTO;
 
 @Repository
 public class UsuarioRepository {
@@ -81,12 +82,23 @@ public class UsuarioRepository {
 	}
 
 
+	public List<SubastaEntity> getSubastas(){
+		return this.listaDeSubastas;
+	}
+
+
+	public List<ProductoEntity> getProductos(){
+		return this.listaDeProductos;
+	}
 
 
     private void cargarProductos()
 	{
         ProductoEntity objProducto1 = new ProductoEntity(123, "Mesa", 600000);
-        this.listaDeProductos.add(objProducto1);
+		this.listaDeProductos.add(objProducto1);
+
+		ProductoEntity objProducto2 = new ProductoEntity(12, "Silla", 100000);
+		this.listaDeProductos.add(objProducto2);
 	}
 
 	public ProductoEntity findById(Integer codigo)

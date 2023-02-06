@@ -55,6 +55,22 @@ public class ProductoRestController {
 		return objProducto;
 	}
 
+	//get productos de subasta
+	@GetMapping("/productos/ensubasta")
+	public List<ProductoDTO> getProductosEnSubasta() {
+		//ProductoDTO objProducto = null;		
+		return subastaService.getProductosEnSubasta();		
+	}
+
+	//get productos de subasta
+	@GetMapping("/productos/enNOsubasta")
+	public List<ProductoDTO> getProductosEnNOSubasta() {
+		//ProductoDTO objProducto = null;		
+		return subastaService.getProductosNOEnSubasta();		
+	}
+
+
+	
 	//crear subasta
 	@PostMapping("/subastas")
 	public SubastaDTO create(@RequestBody SubastaDTO subasta) {	
