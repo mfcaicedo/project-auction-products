@@ -13,6 +13,8 @@ import unicauca.edu.co.backendauctionproducts.models.ProductoEntity;
 import unicauca.edu.co.backendauctionproducts.repositories.UsuarioRepository;
 import unicauca.edu.co.backendauctionproducts.services.DTO.SubastaDTO;
 import unicauca.edu.co.backendauctionproducts.services.DTO.ProductoDTO;
+import unicauca.edu.co.backendauctionproducts.services.DTO.OfertaDTO;
+import unicauca.edu.co.backendauctionproducts.services.DTO.ProductoSubastaDTO;
 
 
 import unicauca.edu.co.backendauctionproducts.services.IProductoService;
@@ -54,6 +56,78 @@ public class SubastaServiceImpl implements ISubastaService{
 		SubastaEntity objSubastaEntity = this.servicioAccesoBaseDatos.saveSubasta(SubastaEntity);
 		SubastaDTO subastaDTO=this.modelMapper.map(objSubastaEntity, SubastaDTO.class);
 		return subastaDTO;	
+
+    }
+
+    @Override
+    public OfertaDTO saveOferta(OfertaDTO oferta){
+
+        //buscamos el objeto en las subastas y cambiamos el ofertante y el precio de la oferta
+        List<SubastaEntity> listaSubastas = this.servicioAccesoBaseDatos.getSubastas();
+
+        for(SubastaEntity SubastaOBJ : listaSubastas){
+
+            int idDeProductoSubasta = SubastaOBJ.getId_producto_ofertado();
+
+            int IdProducto = oferta.getId_producto();
+
+            int IdOfertante = oferta.getId_ofertante();
+
+            int ValorOferta = oferta.getValor_ofertado();
+
+            int valorBase = SubastaOBJ.getValor_ofertado();
+            
+            boolean estado_subasta = SubastaOBJ.getEstado_subasta();
+
+            if(estado_subasta == true && (idDeProductoSubasta ==  IdProducto) && (ValorOferta > valorBase)){
+                //modificamos la subasta
+                SubastaOBJ.setId_ofertante(IdOfertante);
+                SubastaOBJ.setValor_ofertado(ValorOferta);    
+            }
+
+        }
+
+        return oferta;
+
+    }
+
+    @Override
+    public ProductoSubastaDTO getProductoEnSubasta(Integer codigo){
+
+        
+
+        List<SubastaEntity> listaSubastas = this.servicioAccesoBaseDatos.getSubastas();
+
+        ProductoDTO objProducto = getProductoByIdService(codigo);
+
+        ProductoSubastaDTO objProductoSubasta = new ProductoSubastaDTO();
+
+        for(SubastaEntity Subasta : listaSubastas){
+            Integer codigoProdSubasta = Subasta.getId_producto_ofertado();
+
+            if(codigo == codigoProdSubasta){
+                
+                objProductoSubasta.setCodigo(codigo);
+                objProductoSubasta.setNombre(objProducto.getNombre());
+                objProductoSubasta.setValor_actual_oferta(Subasta.getValor_ofertado());
+            
+            }
+            
+        }
+
+        return objProductoSubasta;
+        
+    }
+
+    @Override
+    public List<SubastaDTO> getSubastas(){
+        //List<SubastaDTO> listaDeSubastas = new ArrayList<SubastaDTO>();    
+
+        List<SubastaEntity> listaSubastas = this.servicioAccesoBaseDatos.getSubastas();
+
+        List<SubastaDTO> listaDeSubastasFinal = modelMapper.map(listaSubastas, new TypeToken<List<SubastaDTO>>() {}.getType());
+
+        return listaDeSubastasFinal;
 
     }
 

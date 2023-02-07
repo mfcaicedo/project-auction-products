@@ -21,6 +21,8 @@ import unicauca.edu.co.backendauctionproducts.services.IProductoService;
 import unicauca.edu.co.backendauctionproducts.services.ISubastaService;
 import unicauca.edu.co.backendauctionproducts.services.DTO.ProductoDTO;
 import unicauca.edu.co.backendauctionproducts.services.DTO.SubastaDTO;
+import unicauca.edu.co.backendauctionproducts.services.DTO.OfertaDTO;
+import unicauca.edu.co.backendauctionproducts.services.DTO.ProductoSubastaDTO;
 
 
 @RestController
@@ -56,6 +58,22 @@ public class ProductoRestController {
 	}
 
 	//get productos de subasta
+	@GetMapping("/subastas")
+	public List<SubastaDTO> getSubastas() {
+		//ProductoDTO objProducto = null;		
+		return subastaService.getSubastas();		
+	}
+
+
+	//get productos de subasta
+	@GetMapping("/productoEnSubasta/{codigo}")
+	public ProductoSubastaDTO getProductoEnSubasta(@PathVariable Integer codigo) {
+		ProductoSubastaDTO objProducto = null;	
+		objProducto = subastaService.getProductoEnSubasta(codigo);
+		return objProducto;
+	}
+
+	//get productos de subasta
 	@GetMapping("/productos/ensubasta")
 	public List<ProductoDTO> getProductosEnSubasta() {
 		//ProductoDTO objProducto = null;		
@@ -77,6 +95,17 @@ public class ProductoRestController {
 		SubastaDTO objSubasta = null;
 		objSubasta =  subastaService.save(subasta);
 		return objSubasta;
+	}
+
+
+
+	//enviar oferta
+	//crear subasta
+	@PostMapping("/ofertar")
+	public OfertaDTO ofertar(@RequestBody OfertaDTO oferta) {	
+		OfertaDTO objOferta = null;
+		objOferta =  subastaService.saveOferta(oferta);
+		return objOferta;
 	}
 
 
