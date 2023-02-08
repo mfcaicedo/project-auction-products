@@ -8,6 +8,17 @@
             "mainClass": "unicauca.edu.co.backendauctionproducts.BackendAuctionProductsApplication",
             "projectName": "backend-auction-products",
             "args": "",
+            "envFile": "${workspaceFolder}/.env",
+            "vmArgs": " -Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=52256 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Dspring.jmx.enabled=true -Djava.rmi.server.hostname=localhost -Dspring.application.admin.enabled=true -Dspring.boot.project.name=backend-auction-products"
+        },
+        {
+            "type": "java",
+            "name": "Spring Boot-BackendAuctionLogInApplication<backend-auction-log-in>",
+            "request": "launch",
+            "cwd": "${workspaceFolder}",
+            "mainClass": "unicauca.edu.co.backendauctionlogin.BackendAuctionLogInApplication",
+            "projectName": "backend-auction-log-in",
+            "args": "",
             "envFile": "${workspaceFolder}/.env"
         }
     ]

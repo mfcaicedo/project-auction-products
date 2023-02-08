@@ -94,8 +94,6 @@ public class SubastaServiceImpl implements ISubastaService{
     @Override
     public ProductoSubastaDTO getProductoEnSubasta(Integer codigo){
 
-        
-
         List<SubastaEntity> listaSubastas = this.servicioAccesoBaseDatos.getSubastas();
 
         ProductoDTO objProducto = getProductoByIdService(codigo);
