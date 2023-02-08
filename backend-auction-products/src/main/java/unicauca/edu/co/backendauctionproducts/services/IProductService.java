@@ -8,5 +8,6 @@ public interface IProductService {
     public List<ProductDTO> findAll();
     public ProductDTO save(ProductDTO product);
     public ProductDTO findById(long id);
+    public ProductDTO updateState(long id);
 
 }

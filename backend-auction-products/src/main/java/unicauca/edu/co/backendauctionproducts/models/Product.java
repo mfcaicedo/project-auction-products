@@ -1,5 +1,7 @@
 package unicauca.edu.co.backendauctionproducts.models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -9,7 +11,9 @@ import java.util.List;
 
 @Entity
 @Table(name = "product")
-@Getter @Setter @AllArgsConstructor
+@Getter
+@Setter
+@AllArgsConstructor
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,6 +26,7 @@ public class Product {
 	private float valueInitialOffer;
 	@Column
 	private String state;
+	@Getter(onMethod_= @JsonIgnore)
 	@OneToMany(mappedBy = "product")
 	private List<Auction> auctions;
 

@@ -5,6 +5,7 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import unicauca.edu.co.backendauctionlogin.models.Person;
+import unicauca.edu.co.backendauctionlogin.models.Type_Rol;
 import unicauca.edu.co.backendauctionlogin.respositories.IRepositoryPerson;
 import unicauca.edu.co.backendauctionlogin.services.DTO.PersonDTO;
 import unicauca.edu.co.backendauctionlogin.services.DTO.ResponseBodyInfo;
@@ -56,14 +57,14 @@ public class PersonImplService implements IPersonService {
             return responseBodyInfo;
         }
         //Validar que el correo tenga un formato valido (aplica solo para clientes)
-        if (personDTO.getRol().equals("CLIENTE")) {
-            //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
+        if (personDTO.getRol().equals(Type_Rol.CLIENTE)) {
             if(!personDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
                 responseBodyInfo.setMessage("El correo no tiene un formato valido");
                 responseBodyInfo.setTypeError("errorEmail");
                 responseBodyInfo.setSuccess(false);
                 return responseBodyInfo;
             }
+            //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
             if(!personDTO.getCellphone().matches("^[5][0-9]{9}$")){
                 responseBodyInfo.setMessage("El teléfono debe ser de 10 dígitos y empezar con 5");
                 responseBodyInfo.setTypeError("errorPhone");
@@ -71,7 +72,7 @@ public class PersonImplService implements IPersonService {
                 return responseBodyInfo;
             }
         }
-
+        //Hago la peticion al repositorio para guardar el objeto si pasa las validaciones
         Person personEntity = modelMapper.map(personDTO, Person.class);
         Person objPersonEntity = repositoryPerson.save(personEntity);
         //Armo el objeto de respuesta
@@ -103,19 +104,22 @@ public class PersonImplService implements IPersonService {
             responseBodyInfo.setSuccess(false);
             return responseBodyInfo;
         }
-        //Validar que el correo tenga un formato valido
-        if(!personDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")){
-            responseBodyInfo.setMessage("El correo no tiene un formato valido");
-            responseBodyInfo.setTypeError("errorEmail");
-            responseBodyInfo.setSuccess(false);
-            return responseBodyInfo;
-        }
-        //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
-        if(!personDTO.getCellphone().matches("^[5][0-9]{9}$")){
-            responseBodyInfo.setMessage("El teléfono debe ser de 10 dígitos y empezar con 5");
-            responseBodyInfo.setTypeError("errorPhone");
-            responseBodyInfo.setSuccess(false);
-            return responseBodyInfo;
+        //Validar que el correo tenga un formato valido (aplica solo para clientes)
+        if (personDTO.getRol().equals(Type_Rol.CLIENTE)) {
+            //Validar que el correo tenga un formato valido
+            if (!personDTO.getEmail().matches("^[A-Za-z0-9+_.-]+@(.+)$")) {
+                responseBodyInfo.setMessage("El correo no tiene un formato valido");
+                responseBodyInfo.setTypeError("errorEmail");
+                responseBodyInfo.setSuccess(false);
+                return responseBodyInfo;
+            }
+            //Validar que el teléfono debe ser de 10 dígitos y empezar con 5.
+            if (!personDTO.getCellphone().matches("^[5][0-9]{9}$")) {
+                responseBodyInfo.setMessage("El teléfono debe ser de 10 dígitos y empezar con 5");
+                responseBodyInfo.setTypeError("errorPhone");
+                responseBodyInfo.setSuccess(false);
+                return responseBodyInfo;
+            }
         }
 
         Person personEntity = modelMapper.map(personDTO, Person.class);
